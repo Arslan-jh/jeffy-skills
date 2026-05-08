@@ -8,11 +8,19 @@
 
 import argparse
 import html
+import importlib
+import importlib.util
 import os
 import re
 from pathlib import Path
 
-import markdown
+
+def require_dependency(module_name, install_hint):
+    """Return an optional runtime dependency or raise a clear install message."""
+    if importlib.util.find_spec(module_name) is None:
+        raise RuntimeError(f"缺少依赖 {module_name}。请先安装：{install_hint}")
+    return importlib.import_module(module_name)
+
 
 # ── CSS 样式 ──
 CSS_TEMPLATE = """
@@ -253,6 +261,8 @@ def md_to_html(md_text, title="立体分析报告", subtitle="立体分析法深
                meta_line="", author="jeffy"):
     """将 Markdown 转为带封面的 HTML"""
 
+    markdown = require_dependency("markdown", "pip install markdown")
+
     # 用 markdown 库转换正文
     html_body = markdown.markdown(
         md_text,
@@ -346,9 +356,9 @@ def main():
         print(f"[OK] HTML 已生成: {html_path}")
 
     # 转 PDF
-    from weasyprint import HTML
+    weasyprint = require_dependency("weasyprint", "pip install weasyprint")
 
-    HTML(string=rendered_html, base_url=str(input_path.parent.resolve())).write_pdf(str(output_path))
+    weasyprint.HTML(string=rendered_html, base_url=str(input_path.parent.resolve())).write_pdf(str(output_path))
     size_kb = os.path.getsize(output_path) / 1024
     print(f"[OK] PDF 已生成: {output_path} ({size_kb:.1f} KB)")
 
