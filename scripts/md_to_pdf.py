@@ -22,8 +22,8 @@ CSS_TEMPLATE = """
         content: "HEADER_TEXT";
         font-family: "Droid Sans Fallback", Helvetica, Arial, sans-serif;
         font-size: 8pt;
-        color: #95a5a6;
-        border-bottom: 0.5pt solid #ecf0f1;
+        color: #8c6f6f;
+        border-bottom: 0.5pt solid #f0d9d9;
         padding-bottom: 3mm;
     }
 
@@ -31,8 +31,8 @@ CSS_TEMPLATE = """
         content: "第 " counter(page) " 页";
         font-family: "Droid Sans Fallback", Helvetica, Arial, sans-serif;
         font-size: 8pt;
-        color: #95a5a6;
-        border-top: 0.8pt solid #1a5276;
+        color: #8c6f6f;
+        border-top: 0.8pt solid #c00000;
         padding-top: 2mm;
     }
 }
@@ -46,8 +46,9 @@ body {
     font-family: "Droid Sans Fallback", Helvetica, Arial, sans-serif;
     font-size: 10.5pt;
     line-height: 1.75;
-    color: #2c3e50;
+    color: #2f2727;
     text-align: justify;
+    background: #ffffff;
 }
 
 /* 封面 */
@@ -58,36 +59,39 @@ body {
 }
 .cover h1 {
     font-size: 28pt;
-    color: #1a5276;
+    color: #c00000;
     margin-bottom: 8mm;
     font-weight: bold;
     letter-spacing: 2pt;
+    line-height: 1.25;
 }
 .cover .subtitle {
     font-size: 14pt;
-    color: #95a5a6;
+    color: #8c6f6f;
     margin-bottom: 6mm;
 }
 .cover .meta {
     font-size: 11pt;
-    color: #95a5a6;
+    color: #8c6f6f;
     margin-bottom: 4mm;
 }
 .cover .divider {
     width: 60%;
     margin: 8mm auto;
     border: none;
-    border-top: 1.5pt solid #1a5276;
+    border-top: 1.8pt solid #c00000;
 }
 
 /* 一级标题 */
 h1 {
     font-size: 20pt;
-    color: #1a5276;
+    color: #c00000;
     margin-top: 16mm;
     margin-bottom: 6mm;
     padding-bottom: 3mm;
-    border-bottom: 2pt solid #1a5276;
+    border-bottom: 2pt solid #c00000;
+    border-left: 5pt solid #c00000;
+    padding-left: 4mm;
     page-break-before: always;
     font-weight: bold;
 }
@@ -95,16 +99,18 @@ h1 {
 /* 二级标题 */
 h2 {
     font-size: 14pt;
-    color: #1e8449;
+    color: #8a0000;
     margin-top: 10mm;
     margin-bottom: 5mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 0.6pt solid #e2bcbc;
     font-weight: bold;
 }
 
 /* 三级标题 */
 h3 {
     font-size: 12pt;
-    color: #2e86c1;
+    color: #a60000;
     margin-top: 6mm;
     margin-bottom: 3mm;
     font-weight: bold;
@@ -112,7 +118,7 @@ h3 {
 
 h4 {
     font-size: 11pt;
-    color: #5b2c6f;
+    color: #7a0000;
     margin-top: 5mm;
     margin-bottom: 2mm;
     font-weight: bold;
@@ -129,10 +135,10 @@ p {
 /* 引用块 */
 blockquote {
     margin: 4mm 0;
-    padding: 4mm 4mm 4mm 10mm;
-    background: #f8f9fa;
-    border-left: 3pt solid #1a5276;
-    color: #5d6d7e;
+    padding: 4mm 4mm 4mm 8mm;
+    background: #fff7f7;
+    border-left: 3pt solid #c00000;
+    color: #5f4b4b;
     font-size: 10pt;
 }
 blockquote p {
@@ -142,14 +148,14 @@ blockquote p {
 /* 粗体 */
 strong, b {
     font-weight: bold;
-    color: #1a252f;
+    color: #2b1a1a;
 }
 
 /* 行内代码 */
 code {
     font-family: "Courier New", Courier, monospace;
-    background: #fdf2e9;
-    color: #c0392b;
+    background: #fff0f0;
+    color: #c00000;
     padding: 0.5mm 1.5mm;
     border-radius: 2pt;
     font-size: 9.5pt;
@@ -163,7 +169,7 @@ table {
     font-size: 9.5pt;
 }
 thead th {
-    background: #1a5276;
+    background: #c00000;
     color: white;
     padding: 3mm;
     text-align: left;
@@ -171,16 +177,19 @@ thead th {
 }
 tbody td {
     padding: 2.5mm 3mm;
-    border-bottom: 0.5pt solid #bdc3c7;
+    border-bottom: 0.5pt solid #e2bcbc;
 }
 tbody tr:nth-child(even) {
-    background: #f8f9fa;
+    background: #fff7f7;
+}
+tbody tr:nth-child(odd) {
+    background: #ffffff;
 }
 
 /* 分隔线 */
 hr {
     border: none;
-    border-top: 0.5pt solid #bdc3c7;
+    border-top: 0.5pt solid #e2bcbc;
     margin: 4mm 0;
 }
 
@@ -195,7 +204,7 @@ li {
 
 /* 链接 */
 a {
-    color: #2e86c1;
+    color: #c00000;
     text-decoration: none;
 }
 """
