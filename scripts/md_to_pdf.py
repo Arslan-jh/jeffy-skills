@@ -6,10 +6,12 @@
 依赖: pip install weasyprint markdown --break-system-packages
 """
 
-import sys
+import argparse
+import html
 import os
 import re
-import argparse
+from pathlib import Path
+
 import markdown
 
 # ── CSS 样式 ──
@@ -215,22 +217,30 @@ def md_to_html(md_text, title="立体分析报告", subtitle="立体分析法深
     # 移除正文中的第一个 h1（会用在封面上）
     first_h1_match = re.search(r'<h1>(.*?)</h1>', html_body)
     if first_h1_match:
-        extracted_title = first_h1_match.group(1)
+        extracted_title = html.unescape(first_h1_match.group(1))
         if not title or title == "立体分析报告":
             title = extracted_title
         html_body = html_body.replace(first_h1_match.group(0), '', 1)
 
-    # 替换 CSS 中的页眉占位符
-    css = CSS_TEMPLATE.replace("HEADER_TEXT", f"{title}  |  立体分析法深度研究报告")
+    safe_title = html.escape(title, quote=True)
+    safe_subtitle = html.escape(subtitle, quote=True)
+    safe_meta_line = html.escape(meta_line, quote=True)
+    safe_author = html.escape(author, quote=True)
+
+    # 替换 CSS 中的页眉占位符。CSS content 字符串需要单独转义引号和反斜杠。
+    header_text = f"{title}  |  立体分析法深度研究报告"
+    header_text = header_text.replace("\\", "\\\\").replace('"', '\\"')
+    css = CSS_TEMPLATE.replace("HEADER_TEXT", header_text)
 
     # 构建封面
+    meta_html = f"<div class='meta'>{safe_meta_line}</div>" if safe_meta_line else ""
     cover_html = f"""
     <div class="cover">
-        <h1 style="page-break-before: avoid; border: none;">{title}</h1>
-        <div class="subtitle">{subtitle}</div>
-        {"<div class='meta'>" + meta_line + "</div>" if meta_line else ""}
+        <h1 style="page-break-before: avoid; border: none;">{safe_title}</h1>
+        <div class="subtitle">{safe_subtitle}</div>
+        {meta_html}
         <hr class="divider">
-        <div class="meta">作者: {author}</div>
+        <div class="meta">作者: {safe_author}</div>
     </div>
     """
 
@@ -253,11 +263,16 @@ def main():
     parser = argparse.ArgumentParser(description="立体分析法报告 Markdown → PDF")
     parser.add_argument("input", help="输入的 Markdown 文件路径")
     parser.add_argument("output", help="输出的 PDF 文件路径")
-    parser.add_argument("--title", default=None, help="报告标题")
-    parser.add_argument("--author", default="jf-analysis", help="作者名")
+    parser.add_argument("--title", default=None, help="报告标题；默认使用 Markdown 第一个 H1")
+    parser.add_argument("--subtitle", default="立体分析法深度研究报告", help="封面副标题")
+    parser.add_argument("--author", default="jeffy", help="作者名")
+    parser.add_argument("--no-html", action="store_true", help="只输出 PDF，不保留中间 HTML")
     args = parser.parse_args()
 
-    with open(args.input, "r", encoding="utf-8") as f:
+    input_path = Path(args.input)
+    output_path = Path(args.output)
+
+    with input_path.open("r", encoding="utf-8") as f:
         md_text = f.read()
 
     # 提取元信息
@@ -268,19 +283,27 @@ def main():
             meta_line = stripped
             break
 
-    html = md_to_html(md_text, title=args.title or "立体分析报告", meta_line=meta_line, author=args.author)
+    rendered_html = md_to_html(
+        md_text,
+        title=args.title or "立体分析报告",
+        subtitle=args.subtitle,
+        meta_line=meta_line,
+        author=args.author,
+    )
 
     # 保存中间 HTML（便于调试）
-    html_path = args.output.replace('.pdf', '.html')
-    with open(html_path, 'w', encoding='utf-8') as f:
-        f.write(html)
-    print(f"[OK] HTML 已生成: {html_path}")
+    html_path = output_path.with_suffix(".html")
+    if not args.no_html:
+        html_path.write_text(rendered_html, encoding="utf-8")
+        print(f"[OK] HTML 已生成: {html_path}")
 
     # 转 PDF
     from weasyprint import HTML
-    HTML(string=html).write_pdf(args.output)
-    size_kb = os.path.getsize(args.output) / 1024
-    print(f"[OK] PDF 已生成: {args.output} ({size_kb:.1f} KB)")
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    HTML(string=rendered_html, base_url=str(input_path.parent.resolve())).write_pdf(str(output_path))
+    size_kb = os.path.getsize(output_path) / 1024
+    print(f"[OK] PDF 已生成: {output_path} ({size_kb:.1f} KB)")
 
 
 if __name__ == "__main__":
