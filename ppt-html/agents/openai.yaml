@@ -1,0 +1,4 @@
+interface:
+  display_name: "PPT HTML"
+  short_description: "Create presentation decks as polished HTML slides."
+  default_prompt: "Create a PPT-style HTML slide deck from my topic, materials, or template reference."
