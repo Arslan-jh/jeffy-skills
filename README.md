@@ -7,7 +7,7 @@
 | Skill | 说明 |
 |---|---|
 | `jf-analysis` | 使用立体分析法生成结构化 Markdown 与 PDF 深度研究报告。 |
-| `excellent-operations-ppt` | 使用卓越运营 PPT 模板生成规范企业汇报材料，同时输出 PPTX 和 HTML 预览。 |
+| `excellent-operations-ppt` | 基于 DESIGN.md 生成规范企业汇报材料，同时输出 PPTX 和 HTML 预览。 |
 
 ## jf-analysis：立体分析法
 
@@ -21,11 +21,11 @@
 
 ## excellent-operations-ppt：卓越运营 PPT
 
-`excellent-operations-ppt` 基于 `excellent-operations-ppt/assets/template.pptx` 生成企业汇报材料。
+`excellent-operations-ppt` 基于 `excellent-operations-ppt/DESIGN.md` 生成企业汇报材料。它不捆绑 PPTX 模板，而是把 DESIGN.md 作为设计系统规范，用于指导页面版式、组件、配色、排版和质量判断。
 
 默认交付为：
 
-1. `.pptx`：正式 PowerPoint 文件，保留模板视觉样式，适合汇报、编辑和二次修改；
+1. `.pptx`：正式 PowerPoint 文件，适合汇报、编辑和二次修改；
 2. `.html`：浏览器预览文件，用于快速查看标题链、页面内容和结构。
 
 核心规则：
@@ -35,6 +35,6 @@
 - 中文字体微软雅黑，英文字体 Times New Roman。
 - 每页字号三种以内。
 - 决不允许出现动画和页面转场。
-- 页面遵循模板视觉规范。
+- 页面遵循 DESIGN.md 的视觉规范。
 - 关键内容标红加粗。
 - 慎用感叹号。

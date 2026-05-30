@@ -1,3 +1,0 @@
-display_name: 卓越运营 PPT
-short_description: 基于 DESIGN.md 生成 HTML 预览和 PPTX 企业汇报。
-default_prompt: 基于这个主题和 DESIGN.md 设计一份企业汇报，先形成页面蓝图，并同时交付 HTML 预览和 PPTX 文件。
