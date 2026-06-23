@@ -209,6 +209,47 @@ a {
     color: #c00000;
     text-decoration: none;
 }
+
+/* 研究图表 / 概念图 */
+figure,
+.jf-figure {
+    margin: 6mm 0;
+    padding: 4mm;
+    border: 0.7pt solid #e2bcbc;
+    border-radius: 3pt;
+    background: #fffdfd;
+    page-break-inside: avoid;
+}
+
+figcaption,
+.jf-caption {
+    margin-bottom: 3mm;
+    color: #8a0000;
+    font-size: 9.5pt;
+    font-weight: bold;
+    text-align: left;
+}
+
+figure svg,
+.jf-figure svg {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+figure svg text,
+.jf-figure svg text {
+    font-family: "Droid Sans Fallback", Helvetica, Arial, sans-serif;
+}
+
+.jf-figure-note {
+    margin-top: 3mm;
+    color: #5f4b4b;
+    font-size: 9pt;
+    line-height: 1.5;
+}
 """
 
 
