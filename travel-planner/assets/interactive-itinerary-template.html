@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interactive Travel Plan</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --panel: #ffffff;
+      --ink: #202124;
+      --muted: #666b73;
+      --line: #ded8cf;
+      --accent: #0f766e;
+      --food: #dc2626;
+      --drinks: #7c3aed;
+      --activities: #2563eb;
+      --shopping: #ca8a04;
+      --lodging: #059669;
+      --transport: #475569;
+      --prep: #0e7490;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    header {
+      padding: 28px clamp(16px, 4vw, 48px) 18px;
+      background: #17332f;
+      color: #fff;
+    }
+    header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: 0;
+    }
+    header p { max-width: 980px; margin: 0; color: #dce7e4; }
+    main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 18px clamp(12px, 3vw, 32px) 40px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .sticky { position: sticky; top: 12px; }
+    h2, h3 { margin: 0 0 12px; letter-spacing: 0; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 16px; }
+    .control-group { margin-bottom: 16px; }
+    .segmented, .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    button, input, select { font: inherit; }
+    button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+    button.active {
+      border-color: var(--accent);
+      background: #e6f3f1;
+      color: #064e45;
+      font-weight: 650;
+    }
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    input[type="number"], select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .kpi {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 88px;
+    }
+    .kpi .value { font-size: 22px; font-weight: 750; }
+    .kpi .label { color: var(--muted); font-size: 13px; }
+    #map {
+      height: 460px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: #d8e6e1;
+      margin-bottom: 16px;
+    }
+    .day-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+    .route-list, .card-grid {
+      display: grid;
+      gap: 10px;
+    }
+    .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+    }
+    .card h3 { margin-bottom: 6px; }
+    .meta, .links, .note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .links a {
+      color: var(--accent);
+      margin-right: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: #fff;
+      font-size: 12px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    .food { background: var(--food); }
+    .drinks { background: var(--drinks); }
+    .activities { background: var(--activities); }
+    .shopping { background: var(--shopping); color: #1f2937; }
+    .lodging { background: var(--lodging); }
+    .transport { background: var(--transport); }
+    .prep { background: var(--prep); }
+    section { margin-bottom: 16px; }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0;
+      list-style: none;
+    }
+    .checklist li {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+    }
+    .source-list {
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 920px) {
+      .grid, .two-col, .card-grid, .kpi-grid, .checklist {
+        grid-template-columns: 1fr;
+      }
+      .sticky { position: static; }
+      #map { height: 360px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="title">Interactive Travel Plan</h1>
+    <p id="subtitle"></p>
+  </header>
+  <main>
+    <div class="grid">
+      <aside class="panel sticky">
+        <div class="control-group">
+          <h2>Duration</h2>
+          <div class="segmented" id="durationControls"></div>
+        </div>
+        <div class="control-group">
+          <label for="groupSize">Group size</label>
+          <input id="groupSize" type="number" min="1" value="2">
+        </div>
+        <div class="control-group">
+          <label for="lodgingLevel">Lodging level</label>
+          <select id="lodgingLevel">
+            <option value="budget">Budget clean</option>
+            <option value="mid" selected>Comfort mid-range</option>
+            <option value="comfort">More comfortable</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <h2>Categories</h2>
+          <div class="chips" id="categoryControls"></div>
+        </div>
+        <div class="control-group">
+          <h2>Optional paid items</h2>
+          <div id="activityToggles"></div>
+        </div>
+      </aside>
+
+      <div>
+        <div class="kpi-grid">
+          <div class="kpi"><div class="value" id="totalCost">-</div><div class="label">Estimated cost per person</div></div>
+          <div class="kpi"><div class="value" id="dailyCost">-</div><div class="label">Per person per day</div></div>
+          <div class="kpi"><div class="value" id="baseArea">-</div><div class="label">Recommended base</div></div>
+          <div class="kpi"><div class="value" id="exchange">-</div><div class="label">Currency / exchange note</div></div>
+        </div>
+
+        <section class="panel">
+          <h2>Map and Daily Route</h2>
+          <div id="map"></div>
+          <div class="day-tabs" id="dayTabs"></div>
+          <div class="route-list" id="routeList"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Recommendations by Category</h2>
+          <div class="card-grid" id="placeCards"></div>
+        </section>
+
+        <section class="two-col">
+          <div class="panel">
+            <h2>Preparation</h2>
+            <ul class="checklist" id="prepList"></ul>
+          </div>
+          <div class="panel">
+            <h2>Local Apps and Phrases</h2>
+            <div id="apps"></div>
+            <div id="phrases"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Sources Checked</h2>
+          <ol class="source-list" id="sources"></ol>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const tripData = {
+      destination: "Destination",
+      subtitle: "Default is a relaxed 5-day plan with switchable 3/5/7-day versions.",
+      currency: "LOCAL",
+      exchangeNote: "Replace with current exchange-rate note",
+      baseArea: "Replace with recommended lodging area",
+      categories: ["food", "drinks", "activities", "shopping", "lodging", "transport", "prep"],
+      categoryLabels: {
+        food: "Food",
+        drinks: "Drinks",
+        activities: "Activities",
+        shopping: "Shopping",
+        lodging: "Lodging",
+        transport: "Transport",
+        prep: "Prep"
+      },
+      costModel: {
+        lodgingPerRoomNight: { budget: 120, mid: 180, comfort: 260 },
+        foodPerPersonDay: 55,
+        drinksPerPersonDay: 25,
+        localTransportPerPersonDay: 12,
+        bufferPerPersonDay: 15,
+        intercityPerPerson: { 3: 0, 5: 0, 7: 0 },
+        optionalActivities: [
+          { id: "sample-activity", name: "Sample paid activity", costPerPerson: 60, defaultOn: false }
+        ]
+      },
+      durations: {
+        3: { title: "3-day highlights", days: [] },
+        5: { title: "5-day recommended", days: [] },
+        7: { title: "7-day deep dive", days: [] }
+      },
+      places: [],
+      prep: [],
+      apps: [],
+      phrases: [],
+      sources: []
+    };
+
+    let state = {
+      duration: 5,
+      dayIndex: 0,
+      groupSize: 2,
+      lodgingLevel: "mid",
+      categories: new Set(tripData.categories),
+      optionalActivities: new Set(tripData.costModel.optionalActivities.filter(x => x.defaultOn).map(x => x.id)),
+      map: null,
+      markers: [],
+      route: null
+    };
+
+    function money(value) {
+      return `${Math.round(value).toLocaleString()} ${tripData.currency}`;
+    }
+
+    function getDays() {
+      return tripData.durations[state.duration].days || [];
+    }
+
+    function selectedPlaces() {
+      const ids = new Set();
+      getDays().forEach(day => (day.stops || []).forEach(id => ids.add(id)));
+      return tripData.places.filter(place => ids.has(place.id) && state.categories.has(place.category));
+    }
+
+    function calculateCost() {
+      const nights = Math.max(1, state.duration - 1);
+      const groupSize = Math.max(1, state.groupSize);
+      const c = tripData.costModel;
+      const lodging = (c.lodgingPerRoomNight[state.lodgingLevel] * nights) / groupSize;
+      const daily = (c.foodPerPersonDay + c.drinksPerPersonDay + c.localTransportPerPersonDay + c.bufferPerPersonDay) * state.duration;
+      const optional = c.optionalActivities
+        .filter(item => state.optionalActivities.has(item.id))
+        .reduce((sum, item) => sum + item.costPerPerson, 0);
+      const intercity = c.intercityPerPerson?.[state.duration] || 0;
+      return lodging + daily + optional + intercity;
+    }
+
+    function renderControls() {
+      const durations = document.getElementById("durationControls");
+      durations.innerHTML = "";
+      Object.keys(tripData.durations).forEach(value => {
+        const button = document.createElement("button");
+        button.textContent = `${value} days`;
+        button.className = Number(value) === state.duration ? "active" : "";
+        button.onclick = () => {
+          state.duration = Number(value);
+          state.dayIndex = 0;
+          render();
+        };
+        durations.appendChild(button);
+      });
+
+      const categories = document.getElementById("categoryControls");
+      categories.innerHTML = "";
+      tripData.categories.forEach(category => {
+        const button = document.createElement("button");
+        button.textContent = tripData.categoryLabels[category] || category;
+        button.className = state.categories.has(category) ? `active ${category}` : "";
+        button.onclick = () => {
+          state.categories.has(category) ? state.categories.delete(category) : state.categories.add(category);
+          render();
+        };
+        categories.appendChild(button);
+      });
+
+      const toggles = document.getElementById("activityToggles");
+      toggles.innerHTML = "";
+      tripData.costModel.optionalActivities.forEach(item => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" ${state.optionalActivities.has(item.id) ? "checked" : ""}> ${item.name} (+${money(item.costPerPerson)})`;
+        label.querySelector("input").onchange = event => {
+          event.target.checked ? state.optionalActivities.add(item.id) : state.optionalActivities.delete(item.id);
+          render();
+        };
+        toggles.appendChild(label);
+      });
+
+      document.getElementById("groupSize").oninput = event => {
+        state.groupSize = Number(event.target.value || 1);
+        renderCost();
+      };
+      document.getElementById("lodgingLevel").onchange = event => {
+        state.lodgingLevel = event.target.value;
+        renderCost();
+      };
+    }
+
+    function renderCost() {
+      const total = calculateCost();
+      document.getElementById("totalCost").textContent = money(total);
+      document.getElementById("dailyCost").textContent = money(total / state.duration);
+      document.getElementById("baseArea").textContent = tripData.baseArea;
+      document.getElementById("exchange").textContent = tripData.exchangeNote;
+    }
+
+    function ensureMap() {
+      if (state.map || !window.L) return;
+      state.map = L.map("map").setView([35, 135], 11);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(state.map);
+    }
+
+    function renderMap() {
+      ensureMap();
+      if (!state.map) return;
+      state.markers.forEach(marker => marker.remove());
+      state.markers = [];
+      if (state.route) state.route.remove();
+
+      const day = getDays()[state.dayIndex] || {};
+      const dayStopIds = new Set(day.stops || []);
+      const visible = selectedPlaces().filter(place => place.lat && place.lng);
+      const dayPoints = visible.filter(place => dayStopIds.has(place.id));
+
+      visible.forEach(place => {
+        const color = getComputedStyle(document.documentElement).getPropertyValue(`--${place.category}`).trim() || "#0f766e";
+        const marker = L.circleMarker([place.lat, place.lng], {
+          radius: dayStopIds.has(place.id) ? 8 : 5,
+          color,
+          weight: 2,
+          fillColor: color,
+          fillOpacity: 0.85
+        }).addTo(state.map);
+        marker.bindPopup(`<strong>${place.name}</strong><br>${tripData.categoryLabels[place.category] || place.category}<br>${place.address || ""}`);
+        state.markers.push(marker);
+      });
+
+      const line = dayPoints.map(place => [place.lat, place.lng]);
+      if (line.length > 1) {
+        state.route = L.polyline(line, { color: "#0f766e", weight: 4, opacity: 0.8 }).addTo(state.map);
+      }
+      const bounds = line.length ? line : visible.map(place => [place.lat, place.lng]);
+      if (bounds.length) state.map.fitBounds(bounds, { padding: [24, 24] });
+    }
+
+    function renderDays() {
+      const tabs = document.getElementById("dayTabs");
+      tabs.innerHTML = "";
+      getDays().forEach((day, index) => {
+        const button = document.createElement("button");
+        button.textContent = `Day ${index + 1}`;
+        button.className = index === state.dayIndex ? "active" : "";
+        button.onclick = () => {
+          state.dayIndex = index;
+          render();
+        };
+        tabs.appendChild(button);
+      });
+
+      const list = document.getElementById("routeList");
+      const day = getDays()[state.dayIndex] || {};
+      list.innerHTML = `<h3>${day.title || "Add daily theme"}</h3><p class="note">${day.logic || ""}</p>`;
+      (day.stops || []).forEach((id, index) => {
+        const place = tripData.places.find(item => item.id === id);
+        if (!place || !state.categories.has(place.category)) return;
+        const item = document.createElement("div");
+        item.className = "card";
+        item.innerHTML = `<span class="tag ${place.category}">${index + 1}. ${tripData.categoryLabels[place.category]}</span><h3>${place.name}</h3><p>${place.why || ""}</p><p class="meta">${place.address || ""}</p>`;
+        list.appendChild(item);
+      });
+    }
+
+    function link(label, url) {
+      return url ? `<a href="${url}" target="_blank" rel="noreferrer">${label}</a>` : "";
+    }
+
+    function renderPlaceCards() {
+      const wrap = document.getElementById("placeCards");
+      wrap.innerHTML = "";
+      selectedPlaces().forEach(place => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <span class="tag ${place.category}">${tripData.categoryLabels[place.category] || place.category}</span>
+          <h3>${place.name}</h3>
+          <p>${place.why || ""}</p>
+          <p class="meta">${place.address || ""}${place.phone ? " · " + place.phone : ""}</p>
+          <p class="note">${place.hoursNote || ""} ${place.priceNote || ""}</p>
+          <p class="links">
+            ${link("Official", place.officialUrl)}
+            ${link("Booking", place.bookingUrl)}
+            ${link("Menu", place.menuUrl)}
+            ${link("Map", place.mapUrl)}
+            ${link("Source", place.sourceUrl)}
+          </p>
+          <p class="note">${place.caveat || ""}</p>
+        `;
+        wrap.appendChild(card);
+      });
+    }
+
+    function renderPrep() {
+      document.getElementById("prepList").innerHTML = tripData.prep.map(item => `<li><strong>${item.title}</strong><br><span class="note">${item.detail}</span></li>`).join("");
+      document.getElementById("apps").innerHTML = `<h3>Local apps</h3>${tripData.apps.map(item => `<p><strong>${item.name}</strong>: ${item.use}</p>`).join("")}`;
+      document.getElementById("phrases").innerHTML = `<h3>Daily phrases</h3>${tripData.phrases.map(item => `<p><strong>${item.local}</strong> <span class="note">${item.pronunciation || ""}</span><br>${item.meaning}</p>`).join("")}`;
+      document.getElementById("sources").innerHTML = tripData.sources.map(item => `<li><a href="${item.url}" target="_blank" rel="noreferrer">${item.label}</a> <span class="note">${item.checked || ""}</span></li>`).join("");
+    }
+
+    function render() {
+      document.getElementById("title").textContent = `${tripData.destination} Travel Plan`;
+      document.getElementById("subtitle").textContent = tripData.subtitle;
+      renderControls();
+      renderCost();
+      renderDays();
+      renderPlaceCards();
+      renderPrep();
+      renderMap();
+    }
+
+    render();
+  </script>
+</body>
+</html>

@@ -8,6 +8,7 @@
 |---|---|
 | `jf-analysis` | 使用立体分析法生成结构化 Markdown 与 PDF 深度研究报告。 |
 | `excellent-operations-ppt` | 基于 DESIGN.md 生成规范企业汇报材料，同时输出 PPTX 和 HTML 预览。 |
+| `travel-planner` | 基于真实公开信息和用户评价生成非特种兵旅行规划，默认输出可交互 HTML，支持 3/5/7 天路线、动态预算、地图、真实商户信息和准备事项。 |
 
 ## jf-analysis：立体分析法
 
