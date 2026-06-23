@@ -1,4 +1,0 @@
-interface:
-  display_name: "旅行规划"
-  short_description: "基于真实信息生成可交互旅行规划。"
-  default_prompt: "使用 $travel-planner 生成一份交互式 HTML 旅行方案，包含 3/5/7 天路线、动态人均预算、地图、真实地点信息和准备事项。"
