@@ -1,44 +1,44 @@
-# Interactive HTML Deliverable
+# 交互式 HTML 交付规范
 
-## File Requirements
+## 文件要求
 
-Create a single `.html` file unless the user asks for a web app project. Prefer no build step.
+除非用户明确要求 Web App 项目，否则创建单个 `.html` 文件，优先不要构建步骤。
 
-Use `assets/interactive-itinerary-template.html` as the starting point:
-- Copy it to the working/output directory.
-- Replace the sample `tripData` with destination-specific researched data.
-- Keep the interaction model unless the destination requires a better layout.
+默认使用 `assets/interactive-itinerary-template.html`：
+- 复制到工作目录或输出目录。
+- 用目的地的真实调研数据替换示例 `tripData`。
+- 保留原有交互模型，除非目的地需要更合适的布局。
 
-The page must work by opening the HTML file directly. It may use CDN Leaflet for maps when internet is available. Include a plain list fallback so the itinerary remains usable if map tiles do not load.
+页面必须能直接用浏览器打开。地图可通过 CDN 使用 Leaflet；如果瓦片加载失败，仍要保留清晰的文字路线和地点列表。
 
-## Required Interactions
+## 必需交互
 
-Include:
-- 3/5/7-day switcher.
-- Category filters: food, drinks, activities, shopping, lodging, transport, prep.
-- Day selector that updates the route, stop list, and cost rollup.
-- Dynamic per-person budget calculator with group size and lodging level controls.
-- Optional paid activity toggles.
-- Clickable place cards with address, phone, official site, booking link, menu link, map link, hours/source link, and notes when available.
-- Source panel with last-checked date.
+必须包含：
+- 3/5/7 天切换。
+- 分类筛选：吃、喝、玩乐、购物、住、行、准备。
+- 每日选择器，切换后更新路线、停靠点和费用汇总。
+- 动态人均预算计算器，支持人数和住宿档位控制。
+- 可选付费活动勾选。
+- 可点击地点卡片，包含地址、电话、官网、预订、菜单、地图、营业时间/来源和备注。
+- 来源面板，显示最后核对日期。
 
-## Map Requirements
+## 地图要求
 
-Show:
-- One total map containing all recommended places.
-- A per-day route overlay or ordered stop list for the selected day.
-- Distinct marker colors/icons by category.
-- Day sequence numbers for daily stops when practical.
+展示：
+- 一张包含所有推荐地点的总地图。
+- 所选日期的路线连线或有序停靠列表。
+- 按类别区分标记颜色或图标。
+- 可行时显示每日停靠顺序。
 
-Use verified coordinates from maps/geocoding/source pages. If coordinates are unavailable, use map links and do not invent precise pins.
+坐标必须来自地图、地理编码或来源页核验。没有坐标时，使用地图链接，不要编造精确点位。
 
-## Data Quality
+## 数据质量
 
-Every real-world venue should have as many verified fields as possible:
+每个真实地点尽量包含：
 - name
 - category
 - address
-- latitude/longitude when verified
+- lat/lng（仅在核验后填写）
 - phone
 - officialUrl
 - bookingUrl
@@ -50,25 +50,25 @@ Every real-world venue should have as many verified fields as possible:
 - caveat
 - sources
 
-If a field cannot be verified, leave it blank or write "not found in current public sources"; do not guess.
+无法核实时留空，或写“当前公开来源未找到”；不要猜。
 
-## Visual Structure
+## 视觉结构
 
-Use a polished travel-dashboard layout:
-- Top summary with destination, assumptions, base area, best default duration, and estimated cost.
-- Left or top controls for duration, lodging level, group size, and filters.
-- Main map section.
-- Day-by-day route section.
-- Category sections for food, drinks, activities, shopping, lodging, transport, and preparation.
-- Source and caveat section at the bottom.
+使用精致但信息密度足够的旅行仪表盘布局：
+- 顶部摘要：目的地、假设、住宿基地、默认推荐天数、预计费用。
+- 左侧或顶部控制区：天数、住宿档位、人数、分类筛选。
+- 主地图区域。
+- 每日路线区域。
+- 分类推荐：吃、喝、玩乐、购物、住、行、准备。
+- 底部来源和不确定性说明。
 
-Keep the interface content-dense but comfortable. Avoid decorative filler that does not help the traveler decide.
+界面要舒适、易扫读，不要加入无助于决策的装饰性内容。
 
-## Verification Before Delivery
+## 交付前验证
 
-Before final response:
-- Open the HTML locally or otherwise verify it exists and renders.
-- Check that duration switching changes days and cost.
-- Check that filters affect place visibility.
-- Check that every major recommendation has a source link or an explicit uncertainty note.
-- Report any limitations, such as map tiles requiring internet or menu links unavailable.
+最终回复前：
+- 打开本地 HTML，或用其他方式确认文件存在且能渲染。
+- 检查天数切换会改变天数和费用。
+- 检查分类筛选会影响地点显示。
+- 检查每个重要推荐都有来源链接，或明确写了不确定性。
+- 报告限制，例如地图瓦片需要联网、某些菜单链接未找到。

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Interactive Travel Plan</title>
+  <title>交互式旅行规划</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root {
@@ -200,72 +200,72 @@
 </head>
 <body>
   <header>
-    <h1 id="title">Interactive Travel Plan</h1>
+    <h1 id="title">交互式旅行规划</h1>
     <p id="subtitle"></p>
   </header>
   <main>
     <div class="grid">
       <aside class="panel sticky">
         <div class="control-group">
-          <h2>Duration</h2>
+          <h2>天数</h2>
           <div class="segmented" id="durationControls"></div>
         </div>
         <div class="control-group">
-          <label for="groupSize">Group size</label>
+          <label for="groupSize">同行人数</label>
           <input id="groupSize" type="number" min="1" value="2">
         </div>
         <div class="control-group">
-          <label for="lodgingLevel">Lodging level</label>
+          <label for="lodgingLevel">住宿档位</label>
           <select id="lodgingLevel">
-            <option value="budget">Budget clean</option>
-            <option value="mid" selected>Comfort mid-range</option>
-            <option value="comfort">More comfortable</option>
+            <option value="budget">经济干净</option>
+            <option value="mid" selected>中档舒适</option>
+            <option value="comfort">更舒适</option>
           </select>
         </div>
         <div class="control-group">
-          <h2>Categories</h2>
+          <h2>分类</h2>
           <div class="chips" id="categoryControls"></div>
         </div>
         <div class="control-group">
-          <h2>Optional paid items</h2>
+          <h2>可选付费项目</h2>
           <div id="activityToggles"></div>
         </div>
       </aside>
 
       <div>
         <div class="kpi-grid">
-          <div class="kpi"><div class="value" id="totalCost">-</div><div class="label">Estimated cost per person</div></div>
-          <div class="kpi"><div class="value" id="dailyCost">-</div><div class="label">Per person per day</div></div>
-          <div class="kpi"><div class="value" id="baseArea">-</div><div class="label">Recommended base</div></div>
-          <div class="kpi"><div class="value" id="exchange">-</div><div class="label">Currency / exchange note</div></div>
+          <div class="kpi"><div class="value" id="totalCost">-</div><div class="label">预计人均总消费</div></div>
+          <div class="kpi"><div class="value" id="dailyCost">-</div><div class="label">人均每日</div></div>
+          <div class="kpi"><div class="value" id="baseArea">-</div><div class="label">建议住宿区域</div></div>
+          <div class="kpi"><div class="value" id="exchange">-</div><div class="label">货币 / 汇率说明</div></div>
         </div>
 
         <section class="panel">
-          <h2>Map and Daily Route</h2>
+          <h2>地图与每日路线</h2>
           <div id="map"></div>
           <div class="day-tabs" id="dayTabs"></div>
           <div class="route-list" id="routeList"></div>
         </section>
 
         <section class="panel">
-          <h2>Recommendations by Category</h2>
+          <h2>分类推荐</h2>
           <div class="card-grid" id="placeCards"></div>
         </section>
 
         <section class="two-col">
           <div class="panel">
-            <h2>Preparation</h2>
+            <h2>出发前准备</h2>
             <ul class="checklist" id="prepList"></ul>
           </div>
           <div class="panel">
-            <h2>Local Apps and Phrases</h2>
+            <h2>本地 App 与常用语</h2>
             <div id="apps"></div>
             <div id="phrases"></div>
           </div>
         </section>
 
         <section class="panel">
-          <h2>Sources Checked</h2>
+          <h2>已核对来源</h2>
           <ol class="source-list" id="sources"></ol>
         </section>
       </div>
@@ -275,20 +275,20 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const tripData = {
-      destination: "Destination",
-      subtitle: "Default is a relaxed 5-day plan with switchable 3/5/7-day versions.",
-      currency: "LOCAL",
-      exchangeNote: "Replace with current exchange-rate note",
-      baseArea: "Replace with recommended lodging area",
+      destination: "目的地",
+      subtitle: "默认按不特种兵的 5 日游规划，并提供 3/5/7 天切换。",
+      currency: "当地货币",
+      exchangeNote: "替换为当前汇率说明",
+      baseArea: "替换为建议住宿区域",
       categories: ["food", "drinks", "activities", "shopping", "lodging", "transport", "prep"],
       categoryLabels: {
-        food: "Food",
-        drinks: "Drinks",
-        activities: "Activities",
-        shopping: "Shopping",
-        lodging: "Lodging",
-        transport: "Transport",
-        prep: "Prep"
+        food: "吃",
+        drinks: "喝",
+        activities: "玩乐",
+        shopping: "购物",
+        lodging: "住",
+        transport: "行",
+        prep: "准备"
       },
       costModel: {
         lodgingPerRoomNight: { budget: 120, mid: 180, comfort: 260 },
@@ -298,13 +298,13 @@
         bufferPerPersonDay: 15,
         intercityPerPerson: { 3: 0, 5: 0, 7: 0 },
         optionalActivities: [
-          { id: "sample-activity", name: "Sample paid activity", costPerPerson: 60, defaultOn: false }
+          { id: "sample-activity", name: "示例付费活动", costPerPerson: 60, defaultOn: false }
         ]
       },
       durations: {
-        3: { title: "3-day highlights", days: [] },
-        5: { title: "5-day recommended", days: [] },
-        7: { title: "7-day deep dive", days: [] }
+        3: { title: "3 天精华版", days: [] },
+        5: { title: "5 天推荐版", days: [] },
+        7: { title: "7 天深入版", days: [] }
       },
       places: [],
       prep: [],
@@ -357,7 +357,7 @@
       durations.innerHTML = "";
       Object.keys(tripData.durations).forEach(value => {
         const button = document.createElement("button");
-        button.textContent = `${value} days`;
+        button.textContent = `${value} 天`;
         button.className = Number(value) === state.duration ? "active" : "";
         button.onclick = () => {
           state.duration = Number(value);
@@ -457,7 +457,7 @@
       tabs.innerHTML = "";
       getDays().forEach((day, index) => {
         const button = document.createElement("button");
-        button.textContent = `Day ${index + 1}`;
+        button.textContent = `第 ${index + 1} 天`;
         button.className = index === state.dayIndex ? "active" : "";
         button.onclick = () => {
           state.dayIndex = index;
@@ -468,7 +468,7 @@
 
       const list = document.getElementById("routeList");
       const day = getDays()[state.dayIndex] || {};
-      list.innerHTML = `<h3>${day.title || "Add daily theme"}</h3><p class="note">${day.logic || ""}</p>`;
+      list.innerHTML = `<h3>${day.title || "添加当天主题"}</h3><p class="note">${day.logic || ""}</p>`;
       (day.stops || []).forEach((id, index) => {
         const place = tripData.places.find(item => item.id === id);
         if (!place || !state.categories.has(place.category)) return;
@@ -496,11 +496,11 @@
           <p class="meta">${place.address || ""}${place.phone ? " · " + place.phone : ""}</p>
           <p class="note">${place.hoursNote || ""} ${place.priceNote || ""}</p>
           <p class="links">
-            ${link("Official", place.officialUrl)}
-            ${link("Booking", place.bookingUrl)}
-            ${link("Menu", place.menuUrl)}
-            ${link("Map", place.mapUrl)}
-            ${link("Source", place.sourceUrl)}
+            ${link("官网", place.officialUrl)}
+            ${link("预订", place.bookingUrl)}
+            ${link("菜单", place.menuUrl)}
+            ${link("地图", place.mapUrl)}
+            ${link("来源", place.sourceUrl)}
           </p>
           <p class="note">${place.caveat || ""}</p>
         `;
@@ -510,13 +510,13 @@
 
     function renderPrep() {
       document.getElementById("prepList").innerHTML = tripData.prep.map(item => `<li><strong>${item.title}</strong><br><span class="note">${item.detail}</span></li>`).join("");
-      document.getElementById("apps").innerHTML = `<h3>Local apps</h3>${tripData.apps.map(item => `<p><strong>${item.name}</strong>: ${item.use}</p>`).join("")}`;
-      document.getElementById("phrases").innerHTML = `<h3>Daily phrases</h3>${tripData.phrases.map(item => `<p><strong>${item.local}</strong> <span class="note">${item.pronunciation || ""}</span><br>${item.meaning}</p>`).join("")}`;
+      document.getElementById("apps").innerHTML = `<h3>本地 App</h3>${tripData.apps.map(item => `<p><strong>${item.name}</strong>: ${item.use}</p>`).join("")}`;
+      document.getElementById("phrases").innerHTML = `<h3>常用语</h3>${tripData.phrases.map(item => `<p><strong>${item.local}</strong> <span class="note">${item.pronunciation || ""}</span><br>${item.meaning}</p>`).join("")}`;
       document.getElementById("sources").innerHTML = tripData.sources.map(item => `<li><a href="${item.url}" target="_blank" rel="noreferrer">${item.label}</a> <span class="note">${item.checked || ""}</span></li>`).join("");
     }
 
     function render() {
-      document.getElementById("title").textContent = `${tripData.destination} Travel Plan`;
+      document.getElementById("title").textContent = `${tripData.destination} 旅行规划`;
       document.getElementById("subtitle").textContent = tripData.subtitle;
       renderControls();
       renderCost();

@@ -1,122 +1,122 @@
-# Travel Planning Framework
+# 旅行规划框架
 
-## When the User Only Provides a Destination
+## 用户只提供目的地时
 
-Proceed with these assumptions:
-- Build 3-day, 5-day, and 7-day versions.
-- Treat 5 days / 4 nights as the primary recommendation.
-- Use a relaxed pace with 2-3 anchors per day.
-- Assume mid-range comfort.
-- Cover local food, craft beer/cocktails, cafes, citywalk, indoor climbing, hiking/outdoors, local activities, souvenirs, convenient lodging, practical transit, and preparation.
+直接按以下假设推进：
+- 同时生成 3 天、5 天、7 天版本。
+- 以 5 天 4 晚作为主推荐。
+- 节奏放松，每天 2-3 个核心锚点。
+- 默认中档舒适预算。
+- 覆盖本地美食、精酿/鸡尾酒、咖啡、citywalk、室内攀岩、徒步/户外、本地特色活动、伴手礼、便利住宿、交通和准备事项。
 
-Start the answer or HTML with:
-1. "I am assuming..." with duration options, pace, budget band, and traveler type.
-2. "The trip logic is..." explaining the neighborhood/route structure.
-3. "I would stay in..." naming 1-3 best lodging areas before naming hotels.
+答案或 HTML 开头要说明：
+1. “我先按以下假设规划”：写清天数选项、节奏、预算档位和旅行者类型。
+2. “这条路线的逻辑是”：解释街区、路线和住宿基地如何组织。
+3. “建议住在”：先推荐 1-3 个住宿区域，再列酒店或酒店类型。
 
-## Source Strategy
+## 信息来源策略
 
-Use the most relevant current sources for the destination:
-- Official: tourism board, city transit, airport/rail, museum/park/trail/venue official pages.
-- Maps/reviews: Google Maps, Apple Maps, TripAdvisor, Booking, Agoda, Hotels.com, Expedia, OpenRice, Tabelog, Naver/Kakao, Dianping, Xiaohongshu, Reddit, local forums, as appropriate and accessible.
-- Editorial/local: Michelin, Eater, Time Out, local newspapers, local food writers, specialty coffee/cocktail/craft beer guides.
-- Practical: exchange-rate sources, government travel advisories where safety/visa/health matters, local weather/climate references.
+按目的地选择最相关的当前来源：
+- 官方来源：旅游局、城市交通、机场/铁路、博物馆、公园、徒步路线、场馆官网。
+- 地图/评价：Google Maps、Apple Maps、TripAdvisor、Booking、Agoda、Hotels.com、Expedia、OpenRice、Tabelog、Naver/Kakao、大众点评、小红书、Reddit、本地论坛等，按可访问性和目的地选择。
+- 编辑/本地来源：Michelin、Eater、Time Out、本地报纸、本地餐饮作者、精品咖啡/鸡尾酒/精酿指南。
+- 实用来源：汇率、政府旅行提醒、天气/气候参考、签证/安全/健康信息。
 
-Prefer recent reviews and official pages for hours, closures, prices, menus, booking rules, and contact details. Use older editorial guides mainly to discover candidates, then verify current status elsewhere.
+营业时间、闭馆、价格、菜单、预约规则和联系方式以近期评价与官方页面为主。较早的编辑榜单主要用于发现候选，再用当前来源复核。
 
-## Evidence Rules
+## 证据规则
 
-For each major recommendation, capture:
-- What it is best for.
-- Why it fits a relaxed local-character trip.
-- What sources support it.
-- Contact/details when available: official site, phone, address, map link, booking link, menu link, hours source.
-- Any tradeoff: crowds, reservation difficulty, price, distance, weather, touristiness, or polarizing reviews.
+每个重要推荐都要记录：
+- 最适合什么场景。
+- 为什么适合“不特种兵、重本地特色”的旅行。
+- 有哪些来源支持。
+- 可获得的联系方式：官网、电话、地址、地图、预订、菜单、营业时间来源。
+- 主要取舍：人流、预约难度、价格、距离、天气、游客化程度或评价分歧。
 
-Use these labels when useful:
-- "Core pick": high confidence and central to the plan.
-- "Optional swap": good if weather, energy, or interest changes.
-- "Only if nearby": worthwhile but not worth a special trip.
-- "Skip unless requested": famous but poor fit for relaxed/local travel.
+必要时使用以下标签：
+- “核心推荐”：高信心，且对行程很关键。
+- “可替换”：天气、体力或兴趣变化时适合替换。
+- “顺路再去”：不错，但不值得专门绕路。
+- “除非用户指定，否则跳过”：有名但不符合放松/本地化目标。
 
-## Duration Logic
+## 天数设计逻辑
 
-3-day plan:
-- Prioritize one best lodging base, two signature neighborhoods, one food-market/casual-food cluster, one strong dinner, one drink/cafe cluster, and one citywalk.
-- Include hikes or indoor climbing only if they are easy to reach and do not crowd out the destination's core character.
+3 天版本：
+- 选择一个最佳住宿基地、两个代表性街区、一个本地餐饮/市场簇、一顿强记忆点晚餐、一组咖啡/酒吧、一次 citywalk。
+- 徒步或室内攀岩只有在交通方便且不会挤掉核心体验时才加入。
 
-5-day plan:
-- Use as the primary route.
-- Include balanced citywalks, food/drink depth, one outdoor/hike option, one indoor climbing/local activity option, shopping, and recovery time.
+5 天版本：
+- 作为主路线。
+- 平衡 citywalk、餐饮深度、一次户外/徒步、一次室内攀岩或本地活动、购物和休息时间。
 
-7-day plan:
-- Add slower neighborhoods, day trips, workshops, deeper nightlife/drinks, second hike or scenic route, and more local restaurants/cafes.
-- Keep the pace relaxed; do not fill every empty slot.
+7 天版本：
+- 增加慢街区、周边一日游、工作坊、更深入夜生活/酒吧、第二条徒步或风景路线、更多本地餐馆和咖啡厅。
+- 保持松弛，不要把空档全部填满。
 
-## Itinerary Construction
+## 每日行程结构
 
-Design each day as:
-- Morning: one main walk, neighborhood, museum, market, or outdoor anchor.
-- Afternoon: second anchor plus cafe/rest time.
-- Evening: dinner and drink option clustered nearby.
+每天按以下节奏设计：
+- 上午：一个主要街区、步行线、博物馆、市场或户外锚点。
+- 下午：第二个锚点加咖啡/休息时间。
+- 晚上：晚餐和附近酒吧/夜间活动。
 
-Keep travel-time rules:
-- Avoid more than one cross-city transfer per day unless necessary.
-- Put hikes/outdoor trips on the clearest weather day if dates are known.
-- Put reservation-heavy restaurants and bars earlier in planning notes.
-- Treat arrival and departure days as lighter unless the user says they have full days.
+交通规则：
+- 每天避免超过一次跨城/跨区大转移，除非必要。
+- 已知日期时，把徒步和户外安排在天气最稳的一天。
+- 需要预订的餐厅和酒吧，在准备事项里提前标注。
+- 抵达日和离开日默认放轻，除非用户说是完整可用的一天。
 
-## Category Checklist
+## 分类清单
 
-Food:
-- Identify local dishes, market foods, bakeries/snacks, casual meals, one better dinner if appropriate, and reservation notes.
-- Recommend what to order, not just where to go.
-- Include menu links or official/social menu sources where available.
+吃：
+- 识别本地菜、市场小吃、面包/甜点/零食、随意餐、一顿更好的晚餐和预约提醒。
+- 推荐点什么，而不是只推荐去哪。
+- 可获取时提供菜单链接或官方/社交菜单来源。
 
-Drinks:
-- Include specialty coffee, craft beer, cocktail bars, wine/sake/tea/local drinks when relevant.
-- Mention vibe, booking needs, signature drinks, and alcohol-service caveats.
+喝：
+- 包含精品咖啡、精酿、鸡尾酒、葡萄酒/清酒/茶/本地饮品。
+- 说明氛围、预约需求、招牌饮品和酒精服务注意事项。
 
-Activities:
-- Include citywalk routes with start/end neighborhoods and map stops.
-- Include indoor climbing gyms only after verifying current existence, access, day passes, and location practicality.
-- Include hikes with difficulty, transit access, season/weather risk, and safety notes.
-- Include local activities such as bathhouses, music venues, workshops, sports, markets, festivals, or neighborhood rituals when relevant.
+玩乐：
+- 提供 citywalk 的起止区域和地图停靠点。
+- 室内攀岩馆必须核实现存、交通、日票/体验规则和位置便利性。
+- 徒步线路要写难度、交通、季节/天气风险和安全提示。
+- 加入浴场、音乐现场、工作坊、运动、市场、节庆或街区仪式等本地活动。
 
-Shopping:
-- Focus on consumable or locally made souvenirs.
-- Recommend practical purchase points: markets, department-store food halls, museum shops, independent shops, airports only as fallback.
+购物：
+- 以可食用、可使用或本地制造的伴手礼为主。
+- 推荐实际购买点：市场、百货食品层、博物馆商店、独立店；机场只作为备选。
 
-Lodging:
-- Recommend neighborhoods first by convenience, transit, food/drink access, noise, and airport/station access.
-- Then list representative hotels or hotel types if current evidence supports them.
-- Prefer clean, comfortable, well-located, consistently reviewed properties in a reasonable range.
-- State tradeoffs: nightlife noise, business district emptiness, old rooms, tiny rooms, tourist crowds, or weak transit.
+住：
+- 先按便利度、交通、餐饮可达性、噪音、机场/车站衔接推荐区域。
+- 再在当前信息充分时列代表性酒店或酒店类型。
+- 优先干净、舒适、位置好、评价稳定、价格合理的住宿。
+- 写清取舍：夜生活噪音、商务区晚上冷清、房间老、房间小、游客多或交通弱。
 
-Transport:
-- Explain arrival/departure route, local transit pass/payment, walking/ride-hailing, taxis, bikes/scooters, car rental if needed, and intercity options.
-- Mention last-train or cash-only risks where relevant.
+行：
+- 说明抵离路线、市内交通票/支付方式、步行/打车、出租车、自行车/滑板车、必要时租车和城际交通。
+- 标注末班车、现金支付、叫车限制等风险。
 
-Preparation and practical notes:
-- Include currency, rough exchange-rate check, cash/card acceptance, tipping/service charge, power plug, weather/packing, booking windows, local etiquette, safety, and connectivity.
-- Include local apps for maps, transit, taxi/ride-hailing, food reservations, translation, payment, and eSIM.
-- Include daily phrases with pronunciation when useful: greeting, thanks, excuse me, ordering, allergy/dietary, bill/payment, directions, and emergency.
+其他与准备：
+- 包含货币、汇率粗略核对、现金/刷卡、服务费/小费、插头、天气/打包、预订窗口、礼仪、安全和网络。
+- 包含本地 App：地图、交通、打车、餐饮预订、翻译、支付、eSIM。
+- 包含常用短句和发音：问候、谢谢、打扰、点餐、过敏/饮食禁忌、买单/支付、问路、紧急情况。
 
-## Cost Model
+## 费用模型
 
-Estimate per-person cost with transparent bands:
-- Lodging: per room per night divided by group size, with budget/mid/comfort options.
-- Food and drinks: per day bands, separating casual meals, better dinners, coffee, bars.
-- Activities: fixed optional items that can be toggled.
-- Local transport: daily transit/taxi estimate.
-- Intercity/day-trip transport: separate line item.
-- Shopping: optional planning allowance, not counted by default unless requested.
+用透明区间估算人均费用：
+- 住宿：每间每晚按人数分摊，提供经济/中档/舒适档。
+- 吃喝：按日估算，并区分日常餐、更好晚餐、咖啡和酒吧。
+- 活动：固定可选项，允许用户勾选。
+- 市内交通：每日公共交通/打车估算。
+- 城际或一日游交通：单独列项。
+- 购物：作为可选预算，不默认计入总额，除非用户要求。
 
-Use local currency and a user-friendly converted currency when possible. Mark estimates as planning ranges, not quotes.
+尽量同时使用当地货币和用户熟悉的换算货币。所有金额标注为规划区间，不当作报价。
 
-## Output Skeleton for HTML Data
+## HTML 数据骨架
 
-Structure the data before writing HTML:
+写 HTML 前先整理数据：
 
 ```js
 const tripData = {
@@ -137,4 +137,4 @@ const tripData = {
 };
 ```
 
-Keep the final plan decisive: choose a best plan, then show alternatives only where they improve fit or resilience.
+最终方案要果断：先选出最推荐版本，再用替代项增强适配性和容错。

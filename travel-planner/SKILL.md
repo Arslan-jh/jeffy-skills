@@ -1,91 +1,91 @@
 ---
 name: travel-planner
-description: Evidence-based leisure travel planning with an interactive HTML deliverable. Use when the user asks to plan a trip, itinerary, travel guide, food/drink guide, map route, citywalk, hiking, local activities, souvenirs, lodging areas, transportation, exchange-rate/practical notes, or asks only "I am going to X, how should I plan?" Defaults to a relaxed non-rushed 5-day trip, with switchable 3/5/7-day versions, dynamic per-person cost estimates, route maps, real restaurants/cafes/bars/venues, contact/menu/source links, and preparation notes unless the user specifies another format, style, duration, budget, season, companions, or constraints.
+description: 基于真实公开信息和用户评价制作休闲旅行规划，并默认交付可交互 HTML。适用于用户要求规划旅行、行程、攻略、美食/酒吧/咖啡、地图路线、citywalk、徒步、本地活动、伴手礼、住宿区域、交通、汇率和实用注意事项，或只说“我要去 X，怎么安排？”默认采用不赶路、不特种兵的 5 日游风格，同时提供可切换的 3/5/7 天版本、动态人均预算、路线地图、真实餐馆/咖啡厅/酒吧/场馆、联系方式/菜单/来源链接和准备事项；除非用户明确指定其他格式、节奏、天数、预算、季节、同行人或限制条件。
 ---
 
-# Travel Planner
+# 旅行规划
 
-## Defaults
+## 默认设定
 
-Use this skill to produce practical travel plans grounded in current public information and real user reviews.
+使用这个 skill 生成基于当前公开信息和真实用户评价的实用旅行规划。
 
-Default assumptions when the user only provides a destination:
-- Duration options: build 3-day, 5-day, and 7-day versions; make 5 days the primary recommendation.
-- Pace: relaxed, not "special-forces" travel; normally 2-3 meaningful anchors per day plus flexible food/drink stops.
-- Goal: maximize local character across food, drinks, activities, walking routes, outdoor options, shopping, lodging convenience, transport, preparation, and practical notes.
-- Budget: reasonable mid-range unless the user specifies luxury, budget, backpacking, family, business, or special constraints.
-- Deliverable: create a polished interactive single-file HTML artifact unless the user explicitly asks for text only.
-- Delivery: after creating a file artifact, send one copy through Feishu by default when lark-cli/Feishu delivery is available; verify the message_id, file upload result, or Drive URL before claiming delivery.
-- Output language: match the user's language.
+当用户只提供目的地时，默认：
+- 行程天数：同时规划 3 天、5 天、7 天版本，并以 5 天作为主推荐。
+- 节奏：放松、不特种兵；通常每天 2-3 个重要锚点，再搭配灵活的餐饮、咖啡或酒吧。
+- 目标：尽可能领略本地特色，覆盖吃、喝、玩乐、citywalk、户外、购物、住宿、交通、准备事项和实用信息。
+- 预算：默认合理中档；如果用户指定穷游、奢华、亲子、商务、背包客或特殊约束，则按用户输入调整。
+- 交付：除非用户明确只要文字，否则创建一个精致的单文件交互式 HTML。
+- 发送：创建文件后，如飞书/lark-cli 可用，默认通过飞书发送一份；必须核对 message_id、上传结果或 Drive URL 后再声称已发送。
+- 语言：默认匹配用户语言；中文用户优先用中文写所有说明、界面文案和交付总结。
 
-Ask a clarifying question only when the destination is ambiguous, the user needs bookings for fixed dates, or a missing constraint materially changes the plan. Otherwise state the assumptions and proceed.
+只有在目的地有歧义、用户需要固定日期预订、或缺失条件会实质影响方案时才追问。其他情况先声明假设并继续规划。
 
-## Research Workflow
+## 工作流程
 
-1. Confirm the planning frame:
-   - Destination scope, dates or season if given, party type, arrival/departure points, budget signals, mobility limits, dietary needs, and must-do/must-avoid items.
-   - If absent, use the defaults above.
+1. 明确规划边界：
+   - 目的地范围、日期或季节、同行人、抵离城市/机场/车站、预算信号、体力限制、饮食禁忌、必去和避雷项。
+   - 如用户未提供，使用上面的默认设定。
 
-2. Browse current public sources before recommending:
-   - Official tourism/transport/venue pages for hours, closures, reservation rules, ticketing, trail status, transit passes, and safety notes.
-   - Review and map platforms for current user sentiment, recurring praise/complaints, wait times, cleanliness, neighborhood convenience, and value.
-   - Local food/drink guides, reputable editorial lists, local blogs/forums, and region-specific platforms when relevant.
-   - Recent social or community discussion can inform vibe, but do not treat isolated viral posts as proof.
+2. 推荐前先检索当前公开信息：
+   - 官方旅游、交通、景点、场馆页面：核对营业时间、关闭信息、预约规则、票务、路线状态和安全提示。
+   - 地图和评价平台：核对近期口碑、反复出现的优点/差评、排队、清洁度、地段便利性和性价比。
+   - 本地餐饮酒吧指南、可信媒体、本地博客/论坛、区域性平台。
+   - 社交平台可用于判断氛围和发现候选，但不能把单条爆款内容当作事实依据。
 
-3. Cross-check every major recommendation:
-   - Prefer places that appear in multiple source types or have strong official/current evidence plus consistent review patterns.
-   - Flag uncertainty when information is thin, seasonal, language-limited, or review data is polarized.
-   - Never invent opening hours, prices, reservation rules, ratings, coordinates, phone numbers, menus, hotel availability, or route timings.
+3. 交叉验证重要推荐：
+   - 优先选择同时出现在多类来源中的地点，或有官方当前信息加稳定评价模式支持的地点。
+   - 当信息稀薄、季节性强、语言受限或评价两极分化时，明确标注不确定性。
+   - 不要编造营业时间、价格、预约规则、评分、坐标、电话、菜单、酒店房态或路线耗时。
 
-4. Build 3/5/7-day variants:
-   - Design each duration separately around the best geographic clusters and priority tradeoffs.
-   - Do not merely truncate the 5-day plan for 3 days or pad it for 7 days.
-   - Make the 3-day version concentrate on highest-signal local experiences.
-   - Make the 5-day version the best balanced plan.
-   - Make the 7-day version add slower neighborhoods, hikes/day trips, workshops, nightlife, and deeper local food/drink.
+4. 分别设计 3/5/7 天版本：
+   - 每个版本都按最合适的地理簇和优先级重新设计。
+   - 不要简单截短 5 日游作为 3 日游，也不要随便填充成 7 日游。
+   - 3 天版本集中呈现最高价值的本地体验。
+   - 5 天版本作为最均衡的主方案。
+   - 7 天版本加入更慢的街区、徒步/周边、工作坊、夜生活和更深的本地餐饮。
 
-5. Verify practical feasibility:
-   - Check travel time between anchors, likely opening days, reservation needs, weather/season risks, and last-train/ride-hailing constraints where relevant.
-   - For lodging, recommend areas first, then representative hotel types or examples only if current sources support them.
+5. 核对可行性：
+   - 检查锚点之间交通时间、常见闭馆日、预约需求、天气/季节风险、末班车和打车限制。
+   - 住宿优先推荐区域，再在信息充分时列代表性酒店或酒店类型。
 
-Read `references/planning-framework.md` for full itinerary rules. Read `references/interactive-html.md` before creating the HTML deliverable. Use `assets/interactive-itinerary-template.html` as the starting template unless a custom app structure is clearly better.
+完整行程规则见 `references/planning-framework.md`。创建 HTML 前读取 `references/interactive-html.md`。除非定制 app 明显更合适，否则以 `assets/interactive-itinerary-template.html` 为起点。
 
-## Required Deliverable
+## 必需交付
 
-For a normal full-plan request, create an interactive HTML file and give the user its local path. The HTML must include:
-- Duration switcher for 3, 5, and 7 days.
-- Dynamic per-person total cost estimate that updates when duration, lodging level, group size, and optional paid activities change.
-- Category sections matching the user's taxonomy: food, drinks, activities, shopping, lodging, transport, and other/practical prep.
-- A total map with all recommended places and color/category markers.
-- Day-by-day route views showing that day's line/sequence and stops.
-- Real restaurants, cafes, bars, attractions, shops, hotels/areas, transit options, hikes, and climbing gyms where applicable.
-- Contact fields where available: official site, phone, address, booking link, map link, menu link, opening hours/source link.
-- Source notes and last-checked date for important claims.
-- Preparation checklist: reservations, tickets, documents/visa, payments/cash, local apps, connectivity, packing, weather, etiquette, safety, and simple daily phrases.
+常规完整规划请求必须创建交互式 HTML 文件，并告诉用户本地路径。HTML 必须包含：
+- 3 天、5 天、7 天切换。
+- 动态人均总消费估算，并随天数、住宿档位、人数和可选付费活动变化。
+- 分类区块：吃、喝、玩乐、购物、住、行、其他/准备。
+- 一张总地图，标出所有推荐地点，并按类别区分标记。
+- 每日路线视图，显示当天路线顺序和停靠点。
+- 真实餐馆、咖啡厅、酒吧、景点、商店、住宿区域/酒店、交通方式、徒步线路、攀岩馆和本地活动。
+- 可获取时提供联系方式：官网、电话、地址、预订链接、地图链接、菜单链接、营业时间来源。
+- 重要事实的来源说明和最后核对日期。
+- 准备清单：预订、门票、证件/签证、支付/现金、本地 App、网络、行李、天气、礼仪、安全、常用短句。
 
-Also include a short chat summary after creating the file:
-- File path.
-- Feishu delivery result when available, or the exact blocker if delivery was not possible.
-- Default recommendation and why.
-- Any important uncertainty or booking caveat.
-- Verification performed.
+创建文件后，在聊天中简短说明：
+- 文件路径。
+- 飞书发送结果；如果无法发送，说清楚具体阻塞点。
+- 默认推荐方案及原因。
+- 重要不确定性或预订提醒。
+- 已完成的验证。
 
-If the user asks for a shorter answer or text-only plan, compress the output, but preserve source-based feasibility checks.
+如果用户只要简版或纯文字，压缩输出，但保留基于来源的可行性核对。
 
-## Recommendation Standards
+## 推荐标准
 
-Prioritize:
-- Distinctive local character over generic top-10 sightseeing.
-- Places with current, consistent public evidence.
-- Clean logistics: short transfers, sensible neighborhood clustering, and fallback options.
-- Comfort and recovery time.
-- Memorable meals and drinks that reflect the destination.
-- Explicit tradeoffs: cost, crowds, booking difficulty, distance, weather risk, and touristiness.
+优先：
+- 本地特色，而不是泛泛的热门榜单。
+- 有当前且一致的公开证据支持的地点。
+- 顺路、少折返、住宿和路线聚类合理。
+- 保留休息和恢复时间。
+- 能体现目的地特征的餐饮和饮品。
+- 明确权衡：价格、人流、预约难度、距离、天气风险、游客化程度。
 
-Avoid:
-- Overpacked days.
-- Recommendations based only on a single influencer/social post.
-- Fake precision: do not fabricate coordinates, prices, menus, phone numbers, or hours.
-- Luxury hotels or fine dining unless requested.
-- Unsafe trails, closed venues, or outdated transport advice.
-- Saying "best" without explaining evidence and tradeoff.
+避免：
+- 把每天塞满。
+- 只凭单个达人帖或单条社交内容推荐。
+- 假精确：不要编造坐标、价格、菜单、电话或营业时间。
+- 未经用户要求就推荐奢华酒店或高端餐厅。
+- 推荐危险路线、已关闭场馆或过时交通建议。
+- 只说“最佳”而不解释依据和取舍。
